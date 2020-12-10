@@ -30,11 +30,19 @@ var Portfolio = function (_React$Component) {
         shares_owned: 100,
         cost_per_share: 20,
         market_price: 3
-      }]
+      }],
+      form: {
+        name: '',
+        shares_owned: 0,
+        cost_per_share: 0,
+        market_price: 0
+      }
     };
     // Note: api JSON data often come in underscore_styled like above
     _this.removeStock = _this.removeStock.bind(_this);
     _this.handleChange = _this.handleChange.bind(_this);
+    _this.handleFormChange = _this.handleFormChange.bind(_this);
+    _this.addStock = _this.addStock.bind(_this);
     return _this;
   }
 
@@ -58,12 +66,50 @@ var Portfolio = function (_React$Component) {
       portfolio[index][name] = value;
       this.setState({ portfolio: portfolio });
     }
+
+    //component to handle Form change
+
+  }, {
+    key: 'handleFormChange',
+    value: function handleFormChange(event) {
+      var _event$target2 = event.target,
+          name = _event$target2.name,
+          value = _event$target2.value;
+      var form = this.state.form;
+
+
+      form[name] = value;
+      this.setState({ form: form });
+    }
+
+    //component to handle add stocks
+
+  }, {
+    key: 'addStock',
+    value: function addStock(event) {
+      event.preventDefault();
+      var portfolio = this.state.portfolio.slice();
+
+      portfolio.push(this.state.form);
+
+      this.setState({
+        portfolio: portfolio,
+        form: {
+          name: '',
+          shares_owned: 0,
+          cost_per_share: 0,
+          market_price: 0
+        }
+      });
+    }
   }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
-      var portfolio = this.state.portfolio;
+      var _state = this.state,
+          portfolio = _state.portfolio,
+          form = _state.form;
 
 
       var portfolio_market_value = portfolio.reduce(function (sum, stock) {
@@ -196,6 +242,48 @@ var Portfolio = function (_React$Component) {
                   );
                 })
               )
+            )
+          ),
+          React.createElement(
+            'form',
+            { className: 'col-12 mt-2 mb-4', onSubmit: this.addStock },
+            React.createElement('input', {
+              className: 'mx-2',
+              name: 'name',
+              type: 'text',
+              placeholder: 'Name',
+              onChange: this.handleFormChange,
+              value: form.name,
+              required: true
+            }),
+            React.createElement('input', {
+              className: 'mx-2',
+              name: 'shares_owned',
+              type: 'number',
+              placeholder: 'Shares',
+              value: form.shares_owned,
+              onChange: this.handleFormChange
+            }),
+            React.createElement('input', {
+              className: 'mx-2',
+              name: 'cost_per_share',
+              type: 'number',
+              placeholder: 'Cost',
+              value: form.cost_per_share,
+              onChange: this.handleFormChange
+            }),
+            React.createElement('input', {
+              className: 'mx-2',
+              name: 'market_price',
+              type: 'number',
+              placeholder: 'Price',
+              value: form.market_price,
+              onChange: this.handleFormChange
+            }),
+            React.createElement(
+              'button',
+              { className: 'btn btn-primary btn-sm' },
+              'add'
             )
           ),
           React.createElement(
